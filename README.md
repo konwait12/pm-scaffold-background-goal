@@ -80,7 +80,7 @@ your-project/
 └── background-goal.governance.md   # 机器读:类型判断、PM 选择、来源、知识状态、澄清、Audit、哈希
 ```
 
-模板文件见 [`templates/background-goal.md`](templates/background-goal.md) 和 [`templates/background-goal.governance.md`](templates/background-goal.governance.md)。
+模板文件见 [`skills/project-background-goal/templates/background-goal.md`](skills/project-background-goal/templates/background-goal.md) 和 [`skills/project-background-goal/templates/background-goal.governance.md`](skills/project-background-goal/templates/background-goal.governance.md)。
 
 ## 8 步工作循环
 

@@ -156,7 +156,7 @@ AI 可以归纳材料、判断项目类型、识别缺口并提出问题；所�
 
 ## 产出要求
 
-主文档使用 `templates/background-goal.md` 的标题。三种类型的最低要求：
+主文档使用本 skill 自带模板（`templates/background-goal.md` 的标题，治理文件用 `templates/background-goal.governance.md`）。三种类型的最低要求：
 
 | 类型      | 必须说清楚                         | 目标写法              |
 | ------- | ----------------------------- | ----------------- |
