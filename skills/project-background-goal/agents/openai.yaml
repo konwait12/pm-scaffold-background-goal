@@ -1,0 +1,32 @@
+interface:
+  display_name: "项目背景与目标 (Project Background And Goal)"
+  short_description: "通过 PM 对话把原始业务材料整理为按项目类型分支的人读背景目标文档，并保留独立治理伴随记录。"
+  default_prompt: |
+    Use the project-background-goal Skill with raw business material.
+    When working in Project 001, first fetch the complete 2026-08-27 Feishu
+    meeting source with lark-cli and separate meeting decisions, examples,
+    discussion, and AI interpretation before analyzing the task.
+    First judge whether the work is restructuring, 0-to-1, or iteration,
+    then ask the PM to choose one of the three options. Treat the PM choice
+    as authoritative. Produce a human-facing background-goal.md and a
+    separate background-goal.governance.md. Never use a finished PRD as the
+    sole validation input and never put governance tables in the main document.
+
+trigger_examples:
+  - |
+    Use this Skill when the user provides raw requirements (meeting notes,
+    email, slides, documents, images, or a high-level business description)
+    and needs to clarify why the work exists, the current state, core problem,
+    goals, roles, constraints, and boundaries.
+  - |
+    Use this Skill when the user asks for a project background, business
+    background, project goals, current state, or a short iteration rationale.
+
+should_not_trigger_examples:
+  - |
+    Do NOT use this Skill for user journeys, UX, feature descriptions, field
+    rules, analytics plans, technical architecture, implementation tasks, or
+    complete PRDs.
+  - |
+    If the input is only a one-line feature request, use the low-density path:
+    explain the missing business context and ask clarifying questions before drafting.
