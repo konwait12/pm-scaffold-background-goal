@@ -56,7 +56,7 @@ AI 可以归纳材料、判断项目类型、识别缺口并提出问题；所�
 
 | 阶段         | 必须读取                                                                 | 按需读取                                                                                                                                                      |
 | ---------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 预检与分析      | `references/thinking-framework.md`、`references/source-handling.md`   | `references/background-4elements.md`                                                                                                                      |
+| 预检与分析      | `references/thinking-framework.md`、`references/source-handling.md`   | `references/background-4elements.md`（**材料缺量化数据或目标不可量化时必读**：内含基线数据取数路径引导与 SLA 候选值推导框架，不得直接跳到 UNKNOWN / 定性描述）                                                      |
 | 项目类型判断与澄清  | `references/background-by-type.md`、`references/question-patterns.md` | `references/elicitation-techniques.md`、`references/stakeholder-4class.md`、`references/stakeholder-power-interest.md`                                      |
 | 起草主文档与治理文件 | `references/output-contract.md`                                      | `references/business-constraint-taxonomy.md`、`references/positioning-stxswort.md`、`references/planning-report.md`、`references/value-complexity-matrix.md` |
 | AI Audit   | `references/audit-checklist.md`、`references/anti-patterns.md`        | `references/business-constraint-taxonomy.md`、`references/stakeholder-power-interest.md`                                                                   |
