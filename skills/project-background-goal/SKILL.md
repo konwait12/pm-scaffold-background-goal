@@ -56,7 +56,7 @@ AI 可以归纳材料、判断项目类型、识别缺口并提出问题；所�
 
 | 阶段         | 必须读取                                                                 | 按需读取                                                                                                                                                      |
 | ---------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 预检与分析      | `references/thinking-framework.md`、`references/source-handling.md`   | `references/background-4elements.md`（**材料缺量化数据或目标不可量化时必读**：内含基线数据取数路径引导与 SLA 候选值推导框架，不得直接跳到 UNKNOWN / 定性描述）                                                      |
+| 预检与分析      | `references/thinking-framework.md`、`references/source-handling.md`   | `references/background-4elements.md`（**材料缺量化数据或目标不可量化时必读**：内含基线数据取数路径引导与 SLA 候选值推导框架，不得直接跳到 UNKNOWN / 定性描述）                                               |
 | 项目类型判断与澄清  | `references/background-by-type.md`、`references/question-patterns.md` | `references/elicitation-techniques.md`、`references/stakeholder-4class.md`、`references/stakeholder-power-interest.md`                                      |
 | 起草主文档与治理文件 | `references/output-contract.md`                                      | `references/business-constraint-taxonomy.md`、`references/positioning-stxswort.md`、`references/planning-report.md`、`references/value-complexity-matrix.md` |
 | AI Audit   | `references/audit-checklist.md`、`references/anti-patterns.md`        | `references/business-constraint-taxonomy.md`、`references/stakeholder-power-interest.md`                                                                   |
@@ -109,6 +109,10 @@ AI 可以归纳材料、判断项目类型、识别缺口并提出问题；所�
 ### 3. 按类型澄清
 
 每轮最多问 5 个高影响问题，优先问会改变类型、目标、角色、范围、成本、时间或风险的问题。问题要带上 AI 初步判断和影响，但不要用复杂表格逼 PM 填写。
+
+**批处理 / 无 PM 在场模式（v1.1 · 源自盲测）**：单次批处理任务中 PM 无法实时答复时，按以下规则执行，不得卡死等待：frontmatter `project_type` 写 AI 判断值并在正文标注「待 PM 三选一确认」；`status` 取 `needs_user_input`；未答复的高影响问题全部落入「待确认与风险」与治理文件澄清记录，标注「待答复」及是否阻断；阻断项在摘要显式声明。PM 回流后再按对话模式收敛。
+
+**多时点演进材料取舍规则（v1.1 · 源自盲测）**：同一主题存在多个时间版本的材料（如相隔数月的工作坊 deck）时，事实性内容以**最新版本为基准**，旧版与新版差异登记为 CONFLICT 或在治理文件记录演进脉络，不得并列采信互相矛盾的表述；单份材料内部的日期/数字不一致同样标 CONFLICT 并挂待确认，不得静默取其一。
 
 提问顺序遵循会议的渐进式原则：先确认业务本质、起点/现状和期望结果，再进入范围、约束和衡量方式；不要在背景目标尚未说清时，跳到 PRD、页面或实现细节。每个问题给出 A/B/C 三个互斥选项（可加"其他"），由 PM 选择或改写，AI 不替 PM 做决定。
 
