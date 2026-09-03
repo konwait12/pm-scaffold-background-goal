@@ -64,6 +64,17 @@ def validate(path: Path) -> dict[str, object]:
         errors.append(finding("CRITICAL", "bg.machine_governance_in_main", "Move machine governance records from the main document to its companion file."))
     if not substantive(get_section(text, "参考资料")):
         warnings.append(finding("MEDIUM", "bg.references_missing", "Reference list is empty or still a placeholder.", False))
+
+    # 空骨架红线（防冗杂约定 §1）：占位符密度 advisory
+    import re as _re
+    placeholder_pattern = r"待确认|待补充|TBD|TODO|UNKNOWN|\[空\]|^\s*-\s*$|^\s*\*\s*$"
+    total_lines = max(len([ln for ln in text.splitlines() if ln.strip()]), 1)
+    placeholder_lines = len([ln for ln in text.splitlines() if _re.search(placeholder_pattern, ln)])
+    density = placeholder_lines / total_lines
+    if density > 0.30:
+        warnings.append(finding("MEDIUM", "bg.bloat_warning",
+            f"占位符密度 {density:.0%}（{placeholder_lines}/{total_lines} 行）超过 30%；产物形式完整但内容可能为空骨架。详见 references/anti-bloat-conventions.md §1",
+            blocking=False))
     current = get_section(text, "当前现状与已有做法")
     goal = get_section(text, "目标与成功判断")
     background = get_section(text, "项目背景")
