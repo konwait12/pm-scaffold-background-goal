@@ -63,14 +63,15 @@ python3 skills/project-background-goal/scripts/validate_artifact.py path/to/back
 
 校验器自动查找同目录 `background-goal.governance.md`,只依赖 Python 标准库。
 
-### 4. 启用项目专属基线校验(可选)
+### 4. 项目级会议基线(可选)
+
+本 skill 不绑定任何平台或工具。若 PM 指定了项目级基线材料(会议纪要、项目章程、既有 PRD 等),在治理伴随文件登记「项目级会议基线(可选)」段即可:
 
 ```bash
-export BASELINE_DOC_ID=<PM-指定的飞书-doc-id>
 python3 skills/project-background-goal/scripts/validate_artifact.py background-goal.md --json
 ```
 
-校验器会检查治理伴随文件的"项目专属基线读取记录(可选)"段是否包含该 doc_id 和 `lark-cli` 命令、四类拆分。
+校验器只在该段**已登记**时检查三项内容:读取命令、四类拆分、使用位置。未登记不做任何要求。
 
 ## 产物结构
 
