@@ -6,19 +6,16 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
 from pathlib import Path
 
 REQUIRED_FIELDS = {"artifact_id", "version", "status", "project_type", "owner", "created_at", "updated_at"}
 REQUIRED_HEADINGS = ["一句话摘要", "项目背景", "当前现状与已有做法", "核心问题与证据", "目标与成功判断", "角色与干系人", "约束与依赖", "边界与非目标", "待确认与风险", "参考资料"]
 GOVERNANCE_HEADINGS = ["类型判断与 PM 选择", "主张来源与知识状态", "澄清记录", "AI Audit", "PM 确认与变更"]
-# 项目专属基线 doc_id 默认从环境变量 BASELINE_DOC_ID 读取,便于不同项目复用本校验器。
-# 留空时跳过项目专属基线校验(generic 模式)。
-MEETING_ID = os.environ.get("BASELINE_DOC_ID", "")
 VALID_TYPES = {"重构", "从 0 到 1", "迭代"}
 VALID_STATUSES = {"draft", "needs_user_input", "ready_for_human_review", "confirmed", "superseded"}
 MACHINE_HEADINGS = {"事实与决定", "假设、AI 推断、未知与冲突", "待确认问题", "来源追溯", "下游输入摘要", "Constitution Compliance", "Clarifications", "产品质量增强记录"}
+# 项目级会议基线（可选）：不再硬编码特定会议 ID；若治理伴随文件登记了基线段，则校验段内 token 与原文链接。
 
 def frontmatter(text: str) -> dict[str, str]:
     match = re.match(r"\A---\s*\n(.*?)\n---\s*\n", text, re.DOTALL)
@@ -111,10 +108,16 @@ def validate(path: Path) -> dict[str, object]:
             errors.append(finding("CRITICAL", "bg.hash_mismatch", "main_sha256 does not match the human-facing document."))
         if project_type in VALID_TYPES and not re.search(r"AI.*判断|PM.*选择", get_section(governance, "类型判断与 PM 选择")):
             errors.append(finding("CRITICAL", "bg.type_choice_missing", "Governance companion must record both AI judgment and PM selection."))
-        if meta.get("artifact_id", "").endswith("-001") and "<" not in meta.get("artifact_id", "") and MEETING_ID:
-            meeting_section = get_section(governance, "项目专属基线读取记录（可选）")
-            if MEETING_ID not in meeting_section or "lark-cli" not in meeting_section or "四类拆分" not in meeting_section:
-                errors.append(finding("CRITICAL", "bg.meeting_baseline_missing", "项目专属基线材料必须在治理伴随文件记录 CLI 读取命令和四类拆分。"))
+        if meta.get("artifact_id", "").endswith("-001"):
+            meeting_section = get_section(governance, "项目级会议基线（可选）") or get_section(governance, "001 会议基线读取记录")
+            if meeting_section:
+                missing_tokens = [t for t in ("读取命令", "四类拆分", "使用位置") if t not in meeting_section]
+                if missing_tokens:
+                    errors.append(finding("CRITICAL", "bg.meeting_baseline_incomplete",
+                        f"治理伴随文件登记了项目级会议基线，但缺少必要 token：{', '.join(missing_tokens)}"))
+                if not re.search(r"https?://|feishu\.cn|lark\.cn|notion\.|confluence\.", meeting_section):
+                    warnings.append(finding("MEDIUM", "bg.meeting_baseline_no_link",
+                        "项目级会议基线段未发现原文链接，请确认是否需要补充", False))
         if meta.get("status") == "confirmed" and ("确认" not in get_section(governance, "PM 确认与变更") or "待确认" in get_section(governance, "PM 确认与变更")):
             errors.append(finding("CRITICAL", "bg.confirmation_missing", "Confirmed document requires a completed PM confirmation record."))
     return {"ok": not errors, "errors": [x["message"] for x in errors], "warnings": [x["message"] for x in warnings], "issues": errors + warnings}
